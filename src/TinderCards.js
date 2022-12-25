@@ -40,6 +40,7 @@ function TinderCards() {
       <div className="tinder-cards-container">
         {people.map(person => (
           <div
+            key={person.id}
             style={{ backgroundImage: `url(${person.url})` }}
             className="card"
           >
