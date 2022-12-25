@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { FIRESTORE } from "./firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import SwipeButtons from "./SwipeButtons";
+import Card from "./Card";
 
 function TinderCards() {
   const [people, setPeople] = useState([]);
+  const [peopleIndex, setPeopleIndex] = useState(-1);
 
   useEffect(() => {
     getPeople();
@@ -25,28 +27,39 @@ function TinderCards() {
     });
 
     setPeople(peopleList);
+    setPeopleIndex(peopleList.length - 1);
   }
 
   function onLeftSwipe() {
+    // register a dislike
 
+    setPeopleIndex(peopleIndex - 1);
   }
 
   function onRightSwipe() {
-    
+    // register a like
+
+    setPeopleIndex(peopleIndex - 1);
+  }
+
+  let peopleCards;
+  if (peopleIndex < 0) {
+    peopleCards = <Card empty={true} />;
+  } else if (peopleIndex === 0) {
+    peopleCards = <Card person={people[peopleIndex]} />;
+  } else {
+    peopleCards = (
+      <>
+        <Card person={people[peopleIndex - 1]} />
+        <Card person={people[peopleIndex]} />
+      </>
+    );
   }
 
   return (
     <div>
       <div className="tinder-cards-container">
-        {people.map(person => (
-          <div
-            key={person.id}
-            style={{ backgroundImage: `url(${person.url})` }}
-            className="card"
-          >
-            <h3>{person.name}</h3>
-          </div>
-        ))}
+        {peopleCards}
       </div>
       <SwipeButtons onLeftSwipe={onLeftSwipe} onRightSwipe={onRightSwipe} />
     </div>

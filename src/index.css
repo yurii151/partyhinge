@@ -48,6 +48,17 @@ code {
   color: white;
 }
 
+.card.card-empty {
+  display: flex;
+  justify-content: center;
+}
+
+.card.card-empty > h3 {
+  position: relative;
+  top: 50%;
+  color: black;
+}
+
 .swipe-buttons {
   margin-top: 20px;
   width: 100%;
