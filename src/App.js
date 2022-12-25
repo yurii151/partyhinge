@@ -3,15 +3,20 @@ import Header from './Header';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import TinderCards from './TinderCards';
+import Profile from './Profile';
 
 function App() {
   return (
     <div className="App">
-      <Header/>
       <Router>
+        <Header/>
         <Routes>
-          <Route path ="/chat" element={<></>} />
-          <Route path ="/" element={<TinderCards />} />
+          <Route path ="/profile" element={<Profile />} />
+          <Route path ="/" element={
+            <>
+              <TinderCards />
+            </>
+          }/>
         </Routes>
       </Router>
     </div>
