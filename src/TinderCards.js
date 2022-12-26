@@ -44,7 +44,7 @@ function TinderCards() {
 
   let peopleCards;
   if (peopleIndex < 0) {
-    peopleCards = <Card empty={true} />;
+    peopleCards = <Card empty={true} message={"Out of Potential Matches! Come back later for more"} />;
   } else if (peopleIndex === 0) {
     peopleCards = <Card person={people[peopleIndex]} />;
   } else {
@@ -57,7 +57,7 @@ function TinderCards() {
   }
 
   return (
-    <div>
+    <div className="centered-container">
       <div className="tinder-cards-container">
         {peopleCards}
       </div>

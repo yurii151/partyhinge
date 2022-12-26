@@ -29,7 +29,7 @@ function App() {
     <Router>
       <Header/>
       <Routes>
-        <Route path ="/profile" element={<Profile />} />
+        <Route path ="/profile" element={<Profile user={user} />} />
         <Route path ="/" element={
           <>
             <TinderCards />

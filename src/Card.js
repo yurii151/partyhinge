@@ -1,8 +1,20 @@
+import Button from '@mui/material/Button';
+
 function Card(props) {
+  const uploadButton = props.showUpload ? (
+    <Button variant="contained" component="label">
+      Upload
+      <input hidden accept="image/*" multiple type="file" onChange={(e) => props.onUpload(e)} />
+    </Button>
+  ) : <></>;
+
   return props.empty ?
     (
       <div className="card card-empty">
-        <h3>Out of Potential Matches! Come back later for more</h3>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <h3>{props.message}</h3>
+        </div> 
+        {uploadButton}
       </div>
     ) : (
       <div

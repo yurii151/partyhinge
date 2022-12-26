@@ -24,11 +24,18 @@ code {
   transform: translate(-50%, -50%);
 }
 
-.tinder-cards-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 5vh;
+.centered-container {
+  position: relative;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
   width: 600px;
+  padding-bottom: 50px;
+}
+
+.tinder-cards-container {
+  margin-top: 5vh;
   height: 400px;
   max-width: 85vw;
   max-height: 50vh;
@@ -56,27 +63,14 @@ code {
   color: white;
 }
 
-.card.card-empty {
-  display: flex;
-  justify-content: center;
-}
-
 .card.card-empty > h3 {
-  position: relative;
-  top: 50%;
   color: black;
 }
 
 .swipe-buttons {
   margin-top: 20px;
-  width: 100%;
   display: flex;
-  justify-content: center;
-}
-
-.swipe-buttons button {
-  margin-left: 70px;
-  margin-right: 70px;
+  justify-content: space-evenly;
 }
 
 .swipe-buttons .MuiIconButton-root {
