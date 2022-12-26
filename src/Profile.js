@@ -79,6 +79,13 @@ function Profile(props) {
     setIsSaveLoading(false);
   }
 
+  function handleBioChange(e) {
+    const bioText = e.target.value;
+    if (bioText.length < 70) {
+      setBio(e.target.value);
+    } 
+  }
+
   const imageCard = imageUrl ? (
     <Card person={{ name: name, id: props.user.uid, bio: bio }} url={imageUrl} />
   ) : <Card empty={true} message={"Please upload a photo to be able to swipe!"} showUpload={true} onUpload={handleUpload} />
@@ -112,7 +119,7 @@ function Profile(props) {
             label="Bio"
             placeholder="Your Bio"
             value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            onChange={handleBioChange}
           />
         </div>
         <LoadingButton loading={isSaveLoading} style={{ marginTop: "20px" }} fullWidth variant="contained" onClick={saveProfile}>Save</LoadingButton>

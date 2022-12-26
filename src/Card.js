@@ -34,6 +34,7 @@ function Card(props) {
         className="card"
       >
         <h3>{props.person.name}</h3>
+        <p>{props.person.bio}</p>
       </div>
     );
 }
