@@ -1,12 +1,15 @@
-import Button from "@mui/material/Button";
+import LoadingButton from '@mui/lab/LoadingButton';
 import TextField from "@mui/material/TextField";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import Card from "./Card";
 import { FIRESTORE, STORAGE } from "./firebaseConfig";
+import { getFirebasePersonImageUrl } from './util';
 
 function Profile(props) {
+  const [isSaveLoading, setIsSaveLoading] = useState(false);
+
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -25,8 +28,12 @@ function Profile(props) {
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
       const {
-        name, bio, url
+        name, bio
       } = docSnap.data();
+
+      // const url = await getDownloadURL(ref(STORAGE, `people/${props.user.uid}`));
+      // console.log(url);
+      const url = getFirebasePersonImageUrl(props.user.uid);
 
       setName(name);
       setBio(bio);
@@ -54,6 +61,8 @@ function Profile(props) {
       return;
     }
 
+    setIsSaveLoading(true);
+
     // if the url changed, save the new image to google storage
     let uploadedUrl = originalImageUrl;
     if (originalImageUrl !== imageUrl) {
@@ -66,12 +75,15 @@ function Profile(props) {
       uploadedUrl = snapshot.ref.fullPath;
     }
 
-    // save the name, imageUrl, bio to user's profile
+    // save the name, bio to user's profile
+    const userRef = doc(FIRESTORE, 'people', props.user.uid);
+    await setDoc(userRef, { name: name, bio: bio }, { merge: true });
 
+    setIsSaveLoading(false);
   }
 
   const imageCard = imageUrl ? (
-    <Card person={{ name: name, url: imageUrl }} />
+    <Card person={{ name: name, id: props.user.uid, bio: bio }} />
   ) : <Card empty={true} message={"Please upload a photo to be able to swipe!"} showUpload={true} onUpload={handleUpload} />
 
   return (
@@ -99,7 +111,7 @@ function Profile(props) {
           onChange={(e) => setBio(e.target.value)}
         />
       </div>
-      <Button style={{ marginTop: "20px" }} fullWidth variant="contained" onClick={saveProfile}>Save</Button>
+      <LoadingButton loading={isSaveLoading} style={{ marginTop: "20px" }} fullWidth variant="contained" onClick={saveProfile}>Save</LoadingButton>
     </div>
   );
 }

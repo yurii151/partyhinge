@@ -32,7 +32,7 @@ function App() {
         <Route path ="/profile" element={<Profile user={user} />} />
         <Route path ="/" element={
           <>
-            <TinderCards />
+            <TinderCards user={user} />
           </>
         }/>
       </Routes>

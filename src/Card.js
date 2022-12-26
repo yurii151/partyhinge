@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button';
+import { getFirebasePersonImageUrl } from './util';
 
 function Card(props) {
   const uploadButton = props.showUpload ? (
@@ -18,7 +19,7 @@ function Card(props) {
       </div>
     ) : (
       <div
-        style={{ backgroundImage: `url(${props.person.url})` }}
+        style={{ backgroundImage: `url(${getFirebasePersonImageUrl(props.person.id)})` }}
         className="card"
       >
         <h3>{props.person.name}</h3>
