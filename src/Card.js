@@ -1,7 +1,18 @@
 import Button from '@mui/material/Button';
-import { getFirebasePersonImageUrl } from './util';
+import { getDownloadURL, ref } from 'firebase/storage';
+import { useEffect, useState } from 'react';
+import { STORAGE } from './firebaseConfig';
 
 function Card(props) {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    if (props.person) {
+      getDownloadURL(ref(STORAGE, `people/${props.person.id}`))
+        .then(url => setImageUrl(url))
+    }
+  }, [props.person])
+
   const uploadButton = props.showUpload ? (
     <Button variant="contained" component="label">
       Upload
@@ -19,7 +30,7 @@ function Card(props) {
       </div>
     ) : (
       <div
-        style={{ backgroundImage: `url(${getFirebasePersonImageUrl(props.person.id)})` }}
+        style={{ backgroundImage: `url(${props.url ? props.url : imageUrl})` }}
         className="card"
       >
         <h3>{props.person.name}</h3>

@@ -1,11 +1,11 @@
 import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import Card from "./Card";
 import { FIRESTORE, STORAGE } from "./firebaseConfig";
-import { getFirebasePersonImageUrl } from './util';
 
 function Profile(props) {
   const [isSaveLoading, setIsSaveLoading] = useState(false);
@@ -18,11 +18,11 @@ function Profile(props) {
   const [originalImageUrl, setOriginalImageUrl] = useState("");
 
   useEffect(() => {
-    getUserInfo();
-  }, []);
+    getUserInfo(props.user);
+  }, [props.user]);
 
-  async function getUserInfo() {
-    const docRef = doc(FIRESTORE, "people", props.user.uid);
+  async function getUserInfo(user) {
+    const docRef = doc(FIRESTORE, "people", user.uid);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
@@ -31,9 +31,8 @@ function Profile(props) {
         name, bio
       } = docSnap.data();
 
-      // const url = await getDownloadURL(ref(STORAGE, `people/${props.user.uid}`));
-      // console.log(url);
-      const url = getFirebasePersonImageUrl(props.user.uid);
+      const url = await getDownloadURL(ref(STORAGE, `people/${user.uid}`));
+      console.log(url);
 
       setName(name);
       setBio(bio);
@@ -41,7 +40,7 @@ function Profile(props) {
       setOriginalImageUrl(url);
     } else {
       // doc.data() will be undefined in this case
-      setName(props.user.displayName);
+      setName(user.displayName);
     }
   }
 
@@ -64,7 +63,6 @@ function Profile(props) {
     setIsSaveLoading(true);
 
     // if the url changed, save the new image to google storage
-    let uploadedUrl = originalImageUrl;
     if (originalImageUrl !== imageUrl) {
       // save the new image to google storage
       const storageRef = ref(STORAGE, `people/${props.user.uid}`);
@@ -72,7 +70,6 @@ function Profile(props) {
       // 'file' comes from the Blob or File API
       const snapshot = await uploadBytes(storageRef, imageFile);
       console.log(snapshot);
-      uploadedUrl = snapshot.ref.fullPath;
     }
 
     // save the name, bio to user's profile
@@ -83,7 +80,7 @@ function Profile(props) {
   }
 
   const imageCard = imageUrl ? (
-    <Card person={{ name: name, id: props.user.uid, bio: bio }} />
+    <Card person={{ name: name, id: props.user.uid, bio: bio }} url={imageUrl} />
   ) : <Card empty={true} message={"Please upload a photo to be able to swipe!"} showUpload={true} onUpload={handleUpload} />
 
   return (
@@ -92,6 +89,12 @@ function Profile(props) {
         {imageCard}
       </div>
       <div style={{ marginTop: "40px" }}>
+        <Button fullWidth variant="contained" component="label">
+          Upload New Picture
+          <input hidden accept="image/*" multiple type="file" onChange={(e) => handleUpload(e)} />
+        </Button>
+      </div>
+      <div style={{ marginTop: "20px" }}>
         <TextField
           fullWidth
           label="Name"

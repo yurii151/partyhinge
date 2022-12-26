@@ -10,17 +10,17 @@ function TinderCards(props) {
   const [peopleIndex, setPeopleIndex] = useState(-1);
 
   useEffect(() => {
-    getPeople();
-  }, []);
+    getPeople(props.user.uid);
+  }, [props.user.uid]);
 
-  async function getPeople() {
+  async function getPeople(uid) {
     const querySnapshot = await getDocs(collection(FIRESTORE, "people"));
 
     let peopleList = [];
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       const { name, bio } = doc.data();
-      if (doc.id === props.user.uid) return;
+      if (doc.id === uid) return;
 
       peopleList.push({
         id: doc.id,

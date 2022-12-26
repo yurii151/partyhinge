@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import TinderCards from './TinderCards';
 import Profile from './Profile';
 import { onAuthStateChanged } from 'firebase/auth';
 import { AUTH } from './firebaseConfig';
 import LoginPage from './LoginPage';
+import TinderCardsBlocker from './TinderCardsBlocker';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -32,7 +32,7 @@ function App() {
         <Route path ="/profile" element={<Profile user={user} />} />
         <Route path ="/" element={
           <>
-            <TinderCards user={user} />
+            <TinderCardsBlocker user={user} />
           </>
         }/>
       </Routes>
