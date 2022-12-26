@@ -88,33 +88,35 @@ function Profile(props) {
       <div className="tinder-cards-container">
         {imageCard}
       </div>
-      <div style={{ marginTop: "40px" }}>
-        <Button fullWidth variant="contained" component="label">
-          Upload New Picture
-          <input hidden accept="image/*" multiple type="file" onChange={(e) => handleUpload(e)} />
-        </Button>
+      <div style={{ padding: "10px" }}>
+        <div style={{ marginTop: "40px" }}>
+          <Button fullWidth variant="contained" component="label">
+            Upload New Picture
+            <input hidden accept="image/*" multiple type="file" onChange={(e) => handleUpload(e)} />
+          </Button>
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <TextField
+            fullWidth
+            label="Name"
+            placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            label="Bio"
+            placeholder="Your Bio"
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+          />
+        </div>
+        <LoadingButton loading={isSaveLoading} style={{ marginTop: "20px" }} fullWidth variant="contained" onClick={saveProfile}>Save</LoadingButton>
       </div>
-      <div style={{ marginTop: "20px" }}>
-        <TextField
-          fullWidth
-          label="Name"
-          placeholder="Your Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div style={{ marginTop: "20px" }}>
-        <TextField
-          fullWidth
-          multiline
-          rows={4}
-          label="Bio"
-          placeholder="Your Bio"
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-        />
-      </div>
-      <LoadingButton loading={isSaveLoading} style={{ marginTop: "20px" }} fullWidth variant="contained" onClick={saveProfile}>Save</LoadingButton>
     </div>
   );
 }
